@@ -1,9 +1,9 @@
 package model;
 
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import static model.GCDHelper.GCD;
 
 public class EquationHelper {
 
@@ -42,5 +42,15 @@ public class EquationHelper {
             result.add(mult(basis2.get(i), basis));
         }
         return result;
+    }
+
+
+    public static String toCleanString(List<Equation> system) {
+        StringBuffer sb = new StringBuffer("");
+        for (Equation e: system) {
+            sb.append(GCD(e).toString());
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

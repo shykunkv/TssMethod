@@ -2,11 +2,13 @@ package TSS;
 
 
 import model.Equation;
+import model.TSSHelper;
 import org.junit.Assert;
 import org.junit.Test;
 import tss.TSS;
 
 import static model.EquationHelper.mult;
+import static model.EquationHelper.toCleanString;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +55,8 @@ public class TSSTest {
         expected.add(new Equation("0.737 -1.461 -0.076 0.059 0"));
         expected.add(new Equation("1.290 -2.585 -0.052 0 0.059"));
 
+        System.out.println(TSSHelper.printSystem(actual));
+
         Assert.assertEquals(actual.toString(), expected.toString());
     }
 
@@ -75,5 +79,17 @@ public class TSSTest {
 
         System.out.println(e1);
         System.out.println(e2);
+    }
+
+    @Test
+    public void simpleTest2() {
+        int n = 5;
+        int m = 3;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.println(i * n + j);
+            }
+        }
     }
 }

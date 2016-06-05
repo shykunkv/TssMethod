@@ -37,7 +37,8 @@ public class Equation {
     public String toString() {
         StringBuffer sb = new StringBuffer("[");
         for (Double d : coefficients) {
-            sb.append(String.format("%.3f", d));
+            if (d.equals(-0.0) || d.equals(0.0)) sb.append(String.format("0.000"));
+            else sb.append(String.format("%.3f", d));
             sb.append(" ");
         }
         sb.append("]");
