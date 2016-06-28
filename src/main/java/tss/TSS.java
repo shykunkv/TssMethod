@@ -44,6 +44,11 @@ public class TSS {
         return result;
     }
 
+    /**
+     * Get basis for system of equation
+     * @param system equation system to calculate basis
+     * @return basis
+     */
     public static List<Equation> getBasisForSystem(List<Equation> system) {
         assertThat(system.size(), not(0));
         List<Equation> tempBasis = getBasisForEquation(system.get(0));
@@ -65,6 +70,7 @@ public class TSS {
         }
         return tempBasis;
     }
+
 
     public static List<Equation> getBasisForSystem2(List<Equation> system) {
         assertThat(system.size(), not(0));
