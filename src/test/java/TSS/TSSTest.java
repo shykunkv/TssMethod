@@ -83,13 +83,11 @@ public class TSSTest {
 
     @Test
     public void simpleTest2() {
-        int n = 5;
-        int m = 3;
+        List<Equation> system = new ArrayList<>();
+        system.add(new Equation("-3 -4 5 -6"));
+        system.add(new Equation("2 3 -2 1"));
+        system.add(new Equation("1 -1 -1 2"));
 
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.println(i * n + j);
-            }
-        }
+        System.out.println(TSSHelper.printSystem(TSS.getBasisForSystem2(system)));
     }
 }

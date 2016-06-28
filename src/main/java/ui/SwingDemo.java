@@ -1,6 +1,8 @@
 package ui;
 
 import model.Equation;
+import model.MatrixDto;
+import model.TSSHelper;
 import tss.TSS;
 
 import javax.swing.*;
@@ -40,12 +42,16 @@ public class SwingDemo {
         generateDefaultGUI();
     }
 
-    public static void main(String[] args){
+    public SwingDemo(MatrixDto matrixDto) {
+        prepareGUI(matrixDto.getMatrix(), matrixDto.getM(), matrixDto.getN());
+    }
+
+    public static void main(String[] args) {
         SwingDemo swingControlDemo = new SwingDemo();
         swingControlDemo.showEventDemo();
     }
 
-    private void prepareGUI(int m, int n){
+    private void prepareGUI(int m, int n) {
         mainFrame = new JFrame("Java SWING Examples");
         mainFrame.setSize(800, 600);
         mainFrame.setLayout(new GridLayout(2, 1));
@@ -62,6 +68,38 @@ public class SwingDemo {
         lPanel.setLayout(new GridLayout(m, n+2));
 
         GUIHelper.addTextFields(matrix, b, lPanel, m, n);
+
+        matrixPanel.add(lPanel);
+
+        mainFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent){
+                System.exit(0);
+            }
+        });
+
+        mainFrame.add(matrixPanel);
+        mainFrame.add(outputPanel);
+
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+    }
+
+    private void prepareGUI(List<JTextField> matrixFromFile, int m, int n) {
+        mainFrame = new JFrame("Java SWING Examples");
+        mainFrame.setSize(800, 600);
+        mainFrame.setLayout(new GridLayout(2, 1));
+
+        matrixPanel = new JPanel();
+        matrixPanel.setLayout(new GridLayout(1, 1));
+
+        outputPanel = new JPanel();
+        outputPanel.setLayout(new GridLayout(2, 1));
+
+        generateSizePanel(m, n);
+
+        lPanel = new JPanel();
+        lPanel.setLayout(new GridLayout(m, n+2));
+
+        GUIHelper.addTextFields(matrixFromFile, matrix, b, lPanel, m, n);
 
         matrixPanel.add(lPanel);
 
@@ -153,7 +191,7 @@ public class SwingDemo {
 
                 if (GUIHelper.validateMatrix(matrix)) {
                     List<Equation> system = GUIHelper.getSystemFromGUI(matrix, m, n);
-                    outputText(TSS.getBasisForSystem(system).toString());
+                    outputText(TSSHelper.printSystem(TSS.getBasisForSystem2(system)));
                 } else {
                     outputText("WRONG INPUT");
                 }
@@ -163,7 +201,12 @@ public class SwingDemo {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     try {
-                        List<JTextField> matrixFromFile = GUIHelper.getMatrixFromFile(selectedFile);
+                        MatrixDto matrixDto = GUIHelper.getMatrixFromFile(selectedFile);
+
+                        mainFrame.setVisible(false);
+                        mainFrame.dispose();
+                        SwingDemo swingControlDemo = new SwingDemo(matrixDto);
+                        swingControlDemo.showEventDemo();
                     } catch (IOException ex) {
                         outputText("WRONG FILE");
                         ex.printStackTrace();

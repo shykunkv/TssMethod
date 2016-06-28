@@ -1,6 +1,7 @@
 package tss;
 
 import model.Equation;
+import model.TSSHelper;
 
 
 import java.util.ArrayList;
@@ -63,6 +64,17 @@ public class TSS {
             assertThat(tempBasis2.size(), is(tempBasis.size()));
         }
         return tempBasis;
+    }
+
+    public static List<Equation> getBasisForSystem2(List<Equation> system) {
+        assertThat(system.size(), not(0));
+        TSSHelper.resizeSystem(system, system.size());
+
+        List<Equation> res = getBasisForSystem(system);
+
+        TSSHelper.resizeSystem2(res, system.size());
+
+        return res;
     }
 
 }

@@ -1,6 +1,7 @@
 package ui;
 
 import model.Equation;
+import model.MatrixDto;
 import model.TSSHelper;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class GUIHelper {
 
-    private static String[] signs = {">", "<", "="};
+    private static String[] signs = {">=", "<=", "=="};
 
     public static boolean validateSize(JTextField M, JTextField N) {
         boolean res = true;
@@ -74,7 +75,35 @@ public class GUIHelper {
             }
 
             JComboBox signList = new JComboBox(signs);
-            signList.setSelectedIndex(2);
+            signList.setSelectedIndex(0);
+            lPanel.add(signList);
+
+            JTextField bField = new JTextField();
+            bField.setText("0");
+
+            b.add(bField);
+            lPanel.add(bField);
+        }
+    }
+
+    public static void addTextFields(List<JTextField> matrixFromFile, List<JTextField> matrix, List<JTextField> b,  JPanel lPanel, Integer m, Integer n) {
+
+        for (int i = 0; i < m; i++) {
+            for (int j  = 0; j < n; j++) {
+                JLabel label = new JLabel();
+                if (j == 0) label.setText("  x" + j + "*");
+                else label.setText(" +  x"+ j +"*");
+                lPanel.add(label);
+
+                JTextField matrixTextField = new JTextField(3);
+                matrixTextField.setText(matrixFromFile.get(i * n + j).getText());
+
+                matrix.add(matrixTextField);
+                lPanel.add(matrixTextField);
+            }
+
+            JComboBox signList = new JComboBox(signs);
+            signList.setSelectedIndex(0);
             lPanel.add(signList);
 
             JTextField bField = new JTextField();
@@ -100,20 +129,29 @@ public class GUIHelper {
         return system;
     }
 
-    public static List<JTextField> getMatrixFromFile(File file) throws IOException {
+    public static MatrixDto getMatrixFromFile(File file) throws IOException {
         List<JTextField> result = new ArrayList<>();
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String currLine;
+        int n = 0;
+        int m = 0;
 
         while ((currLine = reader.readLine()) != null) {
-            System.out.println(currLine);
+            currLine = currLine.replace("]", "");
+            currLine = currLine.replace("[", "");
+            String[] strings = currLine.split(" ");
+            n = strings.length;
+            for (String s: strings) {
+                JTextField textField = new JTextField();
+                textField.setText(s);
+                result.add(textField);
+            }
+            m++;
         }
-
         reader.close();
-        return result;
+        return new MatrixDto(result, n, m);
     }
-
 
     public static void printSystemToFile(File file, List<Equation> system) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -123,4 +161,5 @@ public class GUIHelper {
         }
         writer.close();
     }
+
 }
